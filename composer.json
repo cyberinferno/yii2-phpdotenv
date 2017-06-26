@@ -1,0 +1,22 @@
+{
+  "name": "cyberinferno/yii2-phpdotenv",
+  "description": "phpdotenv Yii2 extension",
+  "type": "yii2-extension",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Karthik Panjaje",
+      "email": "karthikreadnovel@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "yiisoft/yii2": "~2.0.0",
+    "vlucas/phpdotenv": "^2.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "cyberinferno\\yii\\phpdotenv\\": ""
+    }
+  }
+}
