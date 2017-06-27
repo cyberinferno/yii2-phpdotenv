@@ -3,7 +3,8 @@
 namespace cyberinferno\yii\phpdotenv;
 
 use Dotenv\Dotenv;
-use yii\base\Component;
+use Yii;
+use yii\base\BootstrapInterface;
 
 /**
  * Class Loader
@@ -12,12 +13,16 @@ use yii\base\Component;
  *
  * @package yii\phpdotenv
  */
-class Loader extends Component
+class Loader implements BootstrapInterface
 {
     /**
-     * @var string Use if custom environment variable directory
+     * @var string Environment variable file directory
      */
-    public $file;
+    public $path = '@vendor/../';
+    /**
+     * @var string Use if custom environment variable file
+     */
+    public $file = '.env';
     /**
      * @var bool Whether to overload already existing environment variables
      */
@@ -30,17 +35,24 @@ class Loader extends Component
     /**
      * @inheritdoc
      */
-    public function init()
+    public function bootstrap($app)
     {
-        if ($this->file !== null) {
-            $this->_dotenv = new Dotenv(__DIR__, $this->file);
-        } else {
-            $this->_dotenv = new Dotenv(__DIR__);
-        }
-        if ($this->overload) {
-            $this->_dotenv->overload();
-        } else {
-            $this->_dotenv->load();
+        try {
+            if ($this->path === null) {
+                $this->path = '@vendor/../';
+            }
+            if ($this->file === null) {
+                $this->file = '.env';
+            }
+            $this->path = Yii::getAlias($this->path);
+            $this->_dotenv = New Dotenv($this->path, $this->file);
+            if ($this->overload) {
+                $this->_dotenv->overload();
+            } else {
+                $this->_dotenv->load();
+            }
+        } catch (\Exception $e) {
+            \Yii::error('Could not load Dotenv file. ERROR: '.$e->getMessage());
         }
     }
 

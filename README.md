@@ -17,7 +17,7 @@ php composer.phar require cyberinferno/yii2-phpdotenv
 or add
 
 ```json
-"cyberinferno/yii2-phpdotenv": "~1.0.0"
+"cyberinferno/yii2-phpdotenv": "~2.0.0"
 ```
 
 to the require section of your composer.json.
@@ -31,10 +31,11 @@ Usage:
 ```php
 return [
     //....
-    'components' => [
-        'dotenv' => [
+    'bootstrap' => [
+        [
             'class' => 'cyberinferno\yii\phpdotenv\Loader',
-            'file' => '.env', // Optional parameter if custom environment variable directory
+            'path' => '@vendor/../', // Directory of the .env file 
+            'file' => '.env', // Optional parameter if custom environment variable file
             'overload' => false, // Optional parameter whether to overload already existing environment variables. Defaults to false
         ],
     ]
