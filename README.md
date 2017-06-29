@@ -41,10 +41,48 @@ return [
     ]
 ];
 ```
-Accessing ``Dotenv`` object:
+To use components which will access environment variables extend Loader class like this:
 
 ```php
-$dotenv = \Yii::$app->dotenv->dotenv;
+<?php
+
+namespace common\components;
+
+use cyberinferno\yii\phpdotenv\Loader;
+use yii\helpers\ArrayHelper;
+
+class PhpdotenvLoader extends Loader
+{
+    public function bootstrap($app)
+    {
+        parent::bootstrap($app);
+        $app->setComponents(ArrayHelper::merge($app->getComponents(),
+            [
+                'db' => [
+                    'class' => 'yii\db\Connection',
+                    'dsn' => getenv('DB_DSN'),
+                    'username' => getenv('DB_USERNAME'),
+                    'password' => getenv('DB_PASSWORD'),
+                    'charset' => 'utf8',
+                ],
+            ]
+        ));
+    }
+}
 ```
 
-For further information about methods available in ``Dotenv`` class refer [Phpdotevn README](https://github.com/vlucas/phpdotenv/blob/master/README.md)
+Bootstrap this class in your config like this:
+
+```php
+return [
+    //....
+    'bootstrap' => [
+        [
+            'class' => 'common\components\PhpdotenvLoader'
+        ],
+    ]
+];
+```
+
+This extension was tested to be working well with [Yii2 Advanced Template](https://github.com/yiisoft/yii2-app-advanced)  
+but can be used in any Yii2 application by sending proper .env file path while bootstrapping the extension.
